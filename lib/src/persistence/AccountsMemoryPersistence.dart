@@ -18,7 +18,7 @@ class AccountsMemoryPersistence
     if (value == null || search == null) {
       return false;
     }
-    return value.toLowerCase().contains(search);    
+    return value.toLowerCase().contains(search);
   }
 
   bool matchSearch(AccountV1 item, String search) {
@@ -29,7 +29,7 @@ class AccountsMemoryPersistence
     if (matchString(item.login, search)) {
       return true;
     }
-    return false;    
+    return false;
   }
 
   Function composeFilter(FilterParams filter) {
@@ -77,10 +77,10 @@ class AccountsMemoryPersistence
       if (!deleted && item.deleted != null && item.deleted) {
         return false;
       }
-      if (ids != null && (ids as List).indexOf(item.id) < 0) {
+      if (ids != null && !(ids as List).contains(item.id)) {
         return false;
-      }                              
-      return true; 
+      }
+      return true;
     };
   }
 
@@ -93,7 +93,8 @@ class AccountsMemoryPersistence
 
   @override
   Future<AccountV1> getOneByLogin(String correlationId, String login) async {
-    var item = items.firstWhere((item) => item.login == login);
+    var item =
+        items.isNotEmpty ? items.where((item) => item.login == login) : null;
 
     if (item != null) {
       logger.trace(correlationId, 'Found account by %s', [login]);
@@ -101,12 +102,19 @@ class AccountsMemoryPersistence
       logger.trace(correlationId, 'Cannot find account by %s', [login]);
     }
 
-    return item;
+    if (item != null && item.isNotEmpty && item.first != null) {
+      return item.first;
+    } else {
+      return null;
+    }
   }
 
   @override
-  Future<AccountV1> getOneByIdOrLogin(String correlationId, String idOrLogin) async {
-    var item = items.firstWhere((item) => item.id == idOrLogin || item.login == idOrLogin);
+  Future<AccountV1> getOneByIdOrLogin(
+      String correlationId, String idOrLogin) async {
+    var item = items.isNotEmpty
+        ? items.where((item) => item.id == idOrLogin || item.login == idOrLogin)
+        : null;
 
     if (item != null) {
       logger.trace(correlationId, 'Found account by %s', [idOrLogin]);
@@ -114,14 +122,23 @@ class AccountsMemoryPersistence
       logger.trace(correlationId, 'Cannot find account by %s', [idOrLogin]);
     }
 
-    return item;
+    if (item != null && item.isNotEmpty && item.first != null) {
+      return item.first;
+    } else {
+      return null;
+    }
   }
 
   @override
   Future<AccountV1> create(String correlationId, AccountV1 item) async {
-    var existingItem = items.where((element) => element.login == item.login);
-    if (existingItem.isNotEmpty && existingItem.first != null) {
-      var err = BadRequestException(correlationId, 'ALREADY_EXIST', 'User account ' + item.login + ' already exist')
+    var existingItem = items.isNotEmpty
+        ? items.where((element) => element.login == item.login)
+        : null;
+    if (existingItem != null &&
+        existingItem.isNotEmpty &&
+        existingItem.first != null) {
+      var err = BadRequestException(correlationId, 'ALREADY_EXIST',
+              'User account ' + item.login + ' already exist')
           .withDetails('login', item.login);
       logger.trace(correlationId, 'Create account error %s', [err]);
       return null;

@@ -1,26 +1,23 @@
 import 'package:test/test.dart';
 import 'package:pip_services3_commons/pip_services3_commons.dart';
 
-import 'package:pip_services_accounts_dart/pip_services_accounts_dart.dart';
+import 'package:pip_services_accounts/pip_services_accounts.dart';
 
 final ACCOUNT1 = AccountV1(
     id: '1',
     login: 'user1@conceptual.vision',
     name: 'Test User 1',
-    deleted: false
-);
+    deleted: false);
 final ACCOUNT2 = AccountV1(
     id: '2',
     login: 'user2@conceptual.vision',
     name: 'Test User 2',
-    deleted: false
-);
+    deleted: false);
 final ACCOUNT3 = AccountV1(
     id: '3',
     login: 'user3@conceptual.vision',
     name: 'Test User 3',
-    deleted: false
-);
+    deleted: false);
 
 class AccountsPersistenceFixture {
   IAccountsPersistence _persistence;
@@ -57,7 +54,7 @@ class AccountsPersistenceFixture {
     expect(account.active, true);
   }
 
-void testCrudOperations() async {
+  void testCrudOperations() async {
     AccountV1 account1;
 
     // Create items
@@ -96,20 +93,19 @@ void testCrudOperations() async {
 
     // Get account filtered by active
     var page = await _persistence.getPageByFilter(
-        null, FilterParams.fromValue({'active': true, 'search': 'user'}), PagingParams());
+        null,
+        FilterParams.fromValue({'active': true, 'search': 'user'}),
+        PagingParams());
     expect(page.data.length, 3);
 
     // Get account by email
-    var account = await _persistence.getOneByLogin(
-        null, ACCOUNT2.login);
+    var account = await _persistence.getOneByLogin(null, ACCOUNT2.login);
     expect(account, isNotNull);
     expect(ACCOUNT2.id, account.id);
 
     // Get account by id or email
-    account = await _persistence.getOneByIdOrLogin(
-        null, ACCOUNT3.login);
+    account = await _persistence.getOneByIdOrLogin(null, ACCOUNT3.login);
     expect(account, isNotNull);
     expect(ACCOUNT3.id, account.id);
-  }    
-
+  }
 }

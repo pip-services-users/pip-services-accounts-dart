@@ -6,7 +6,7 @@ class AccountV1 implements IStringIdentifiable {
   String id;
   String login;
   String name;
-  
+
   /* Activity tracking */
   DateTime create_time;
   bool deleted;
@@ -21,9 +21,6 @@ class AccountV1 implements IStringIdentifiable {
   /* Custom fields */
   var custom_hdr;
   var custom_dat;
-
-  AccountV1.from(this.id, this.login, this.name);
-
 
   AccountV1(
       {String id,
@@ -40,7 +37,7 @@ class AccountV1 implements IStringIdentifiable {
       var custom_dat})
       : id = id,
         login = login,
-        name = name,        
+        name = name,
         create_time = create_time,
         deleted = deleted,
         active = active,
@@ -55,7 +52,10 @@ class AccountV1 implements IStringIdentifiable {
     id = json['id'];
     login = json['login'];
     name = json['name'];
-    create_time = DateTime.tryParse(json['create_time']);    
+    var create_time_json = json['create_time'];
+    create_time = create_time_json != null
+        ? DateTime.tryParse(json['create_time'])
+        : null;
     deleted = json['deleted'];
     active = json['active'];
     about = json['about'];
@@ -71,7 +71,8 @@ class AccountV1 implements IStringIdentifiable {
       'id': id,
       'login': login,
       'name': name,
-      'create_time': create_time.toIso8601String(),
+      'create_time':
+          create_time != null ? create_time.toIso8601String() : create_time,
       'deleted': deleted,
       'active': active,
       'about': about,
@@ -81,5 +82,5 @@ class AccountV1 implements IStringIdentifiable {
       'custom_hdr': custom_hdr,
       'custom_dat': custom_dat
     };
-  }    
+  }
 }

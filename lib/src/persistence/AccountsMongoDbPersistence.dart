@@ -21,12 +21,16 @@ class AccountsMongoDbPersistence
 
     var search = filter.getAsNullableString('search');
     if (search != null) {
-      var searchRegex = RegExp(search, caseSensitive: false);
+      var searchRegex = RegExp(r'^' + search, caseSensitive: false);
       var searchCriteria = [];
-      searchCriteria.add({ 'login': { r'$regex': searchRegex.pattern } });
-      searchCriteria.add({ 'name': { r'$regex': searchRegex.pattern } });
-      criteria.add({ r'$or': searchCriteria });
-    }    
+      searchCriteria.add({
+        'login': {r'$regex': searchRegex.pattern}
+      });
+      searchCriteria.add({
+        'name': {r'$regex': searchRegex.pattern}
+      });
+      criteria.add({r'$or': searchCriteria});
+    }
 
     var id = filter.getAsNullableString('id');
     if (id != null) {
@@ -41,7 +45,7 @@ class AccountsMongoDbPersistence
       criteria.add({
         '_id': {r'$in': ids}
       });
-    }    
+    }
 
     var name = filter.getAsNullableString('name');
     if (name != null) {
@@ -58,20 +62,31 @@ class AccountsMongoDbPersistence
       criteria.add({'active': active});
     }
 
-    var toTime   = filter.getAsNullableDateTime('to_create_time');
-    if (toTime  != null) {
-      criteria.add({'create_time': { r'$lt': toTime  }});
+    var toTime = filter.getAsNullableDateTime('to_create_time');
+    if (toTime != null) {
+      criteria.add({
+        'create_time': {r'$lt': toTime}
+      });
     }
 
-    var fromTime  = filter.getAsNullableDateTime('from_create_time');
+    var fromTime = filter.getAsNullableDateTime('from_create_time');
     if (fromTime != null) {
-      criteria.add({'create_time': { r'$gte': fromTime }});
-    }    
-    
+      criteria.add({
+        'create_time': {r'$gte': fromTime}
+      });
+    }
+
     var deleted = filter.getAsBooleanWithDefault('deleted', false);
     if (!deleted) {
-      criteria.add({ r'$or': [ { 'deleted': false }, { 'deleted': { r'$exists': false } } ] });
-    }           
+      criteria.add({
+        r'$or': [
+          {'deleted': false},
+          {
+            'deleted': {r'$exists': false}
+          }
+        ]
+      });
+    }
 
     return criteria.isNotEmpty ? {r'$and': criteria} : null;
   }
@@ -79,12 +94,12 @@ class AccountsMongoDbPersistence
   @override
   Future<DataPage<AccountV1>> getPageByFilter(
       String correlationId, FilterParams filter, PagingParams paging) async {
-    return super
-        .getPageByFilterEx(correlationId, composeFilter(filter), paging, null); //{'-create_time': { 'custom_dat': 0 }}
+    return super.getPageByFilterEx(correlationId, composeFilter(filter), paging,
+        null); //{'-create_time': { 'custom_dat': 0 }}
   }
 
   @override
-  Future<AccountV1> getOneByLogin(String correlationId, String login) async{
+  Future<AccountV1> getOneByLogin(String correlationId, String login) async {
     var filter = {'login': login};
     var query = mngquery.SelectorBuilder();
     var selector = <String, dynamic>{};
@@ -100,14 +115,20 @@ class AccountsMongoDbPersistence
           [collectionName, login]);
       return null;
     }
-    logger.trace(
-        correlationId, 'Retrieved from %s with login = %s', [collectionName, login]);
+    logger.trace(correlationId, 'Retrieved from %s with login = %s',
+        [collectionName, login]);
     return convertToPublic(item);
   }
 
   @override
-  Future<AccountV1> getOneByIdOrLogin(String correlationId, String idOrLogin) async {
-    var filter = {r'$or': [{'login': idOrLogin}, {'_id': idOrLogin}]};  
+  Future<AccountV1> getOneByIdOrLogin(
+      String correlationId, String idOrLogin) async {
+    var filter = {
+      r'$or': [
+        {'login': idOrLogin},
+        {'_id': idOrLogin}
+      ]
+    };
     var query = mngquery.SelectorBuilder();
     var selector = <String, dynamic>{};
     if (filter != null && filter.isNotEmpty) {
@@ -122,8 +143,8 @@ class AccountsMongoDbPersistence
           [collectionName, idOrLogin]);
       return null;
     }
-    logger.trace(
-        correlationId, 'Retrieved from %s with idOrLogin = %s', [collectionName, idOrLogin]);
+    logger.trace(correlationId, 'Retrieved from %s with idOrLogin = %s',
+        [collectionName, idOrLogin]);
     return convertToPublic(item);
   }
 
@@ -133,5 +154,5 @@ class AccountsMongoDbPersistence
     item.create_time = item.create_time ?? DateTime.now();
 
     return super.create(correlationId, item);
-  }  
+  }
 }

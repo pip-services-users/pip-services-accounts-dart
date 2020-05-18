@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:test/test.dart';
 import 'package:pip_services3_commons/pip_services3_commons.dart';
 
-import 'package:pip_services_accounts_dart/pip_services_accounts_dart.dart';
+import 'package:pip_services_accounts/pip_services_accounts.dart';
 import './AccountsPersistenceFixture.dart';
 
 void main() {
@@ -15,7 +15,8 @@ void main() {
       var mongoHost = Platform.environment['MONGO_SERVICE_HOST'] ?? 'localhost';
       var mongoPort = Platform.environment['MONGO_SERVICE_PORT'] ?? '27017';
       var mongoDatabase = Platform.environment['MONGO_SERVICE_DB'] ?? 'test';
-      var mongoCollection = Platform.environment['MONGO_COLLECTION'] ?? 'accounts';
+      var mongoCollection =
+          Platform.environment['MONGO_COLLECTION'] ?? 'accounts';
       // Exit if mongo connection is not set
       if (mongoUri == '' && mongoHost == '') return;
 

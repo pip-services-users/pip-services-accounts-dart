@@ -46,7 +46,7 @@ class AccountsCommandSet extends CommandSet {
         ObjectSchema(true).withRequiredProperty('login', TypeCode.String),
         (String correlationId, Parameters args) {
       var login = args.getAsString('login');
-      return _controller.getAccountById(correlationId, login);
+      return _controller.getAccountByLogin(correlationId, login);
     });
   }
 
@@ -55,7 +55,7 @@ class AccountsCommandSet extends CommandSet {
         ObjectSchema(true).withRequiredProperty('id_or_login', TypeCode.String),
         (String correlationId, Parameters args) {
       var idOrLogin = args.getAsString('id_or_login');
-      return _controller.getAccountById(correlationId, idOrLogin);
+      return _controller.getAccountByIdOrLogin(correlationId, idOrLogin);
     });
   }
 

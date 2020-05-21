@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the getAccountByIdOrLogin method from the AccountsController class, for the Dart programming language.">
-  <title>getAccountByIdOrLogin method - AccountsController class - pip_services_accounts library - Dart API</title>
+  <meta name="description" content="API docs for the logUserActivity method from the AccountsController class, for the Dart programming language.">
+  <title>logUserActivity method - AccountsController class - pip_services_accounts library - Dart API</title>
 
   
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
@@ -27,9 +27,9 @@
     <li><a href="../../index.html">pip_services_accounts</a></li>
     <li><a href="../../pip_services_accounts/pip_services_accounts-library.html">pip_services_accounts</a></li>
     <li><a href="../../pip_services_accounts/AccountsController-class.html">AccountsController</a></li>
-    <li class="self-crumb">getAccountByIdOrLogin method</li>
+    <li class="self-crumb">logUserActivity method</li>
   </ol>
-  <div class="self-name">getAccountByIdOrLogin</div>
+  <div class="self-name">logUserActivity</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -48,7 +48,7 @@
       <li><a href="../../index.html">pip_services_accounts</a></li>
       <li><a href="../../pip_services_accounts/pip_services_accounts-library.html">pip_services_accounts</a></li>
       <li><a href="../../pip_services_accounts/AccountsController-class.html">AccountsController</a></li>
-      <li class="self-crumb">getAccountByIdOrLogin method</li>
+      <li class="self-crumb">logUserActivity method</li>
     </ol>
     
     <h5>AccountsController class</h5>
@@ -92,28 +92,16 @@
   </div><!--/.sidebar-offcanvas-->
 
   <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
-      <div><h1><span class="kind-method">getAccountByIdOrLogin</span> method</h1></div>
+      <div><h1><span class="kind-method">logUserActivity</span> method</h1></div>
 
     <section class="multi-line-signature">
-      <div>
-        <ol class="annotation-list">
-          <li>@override</li>
-        </ol>
-      </div>
-      <span class="returntype">Future<span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../pip_services_accounts/AccountV1-class.html">AccountV1</a></span>&gt;</span></span>
-            <span class="name ">getAccountByIdOrLogin</span>
-(<wbr><ol class="parameter-list"><li><span class="parameter" id="getAccountByIdOrLogin-param-correlationId"><span class="type-annotation">String</span> <span class="parameter-name">correlationId</span>, </span></li>
-<li><span class="parameter" id="getAccountByIdOrLogin-param-idOrLogin"><span class="type-annotation">String</span> <span class="parameter-name">idOrLogin</span></span></li>
+      <span class="returntype">void</span>
+            <span class="name ">logUserActivity</span>
+(<wbr><ol class="parameter-list"><li><span class="parameter" id="logUserActivity-param-correlationId"><span class="type-annotation">String</span> <span class="parameter-name">correlationId</span>, </span></li>
+<li><span class="parameter" id="logUserActivity-param-account"><span class="type-annotation"><a href="../../pip_services_accounts/AccountV1-class.html">AccountV1</a></span> <span class="parameter-name">account</span>, </span></li>
+<li><span class="parameter" id="logUserActivity-param-activityType"><span class="type-annotation">String</span> <span class="parameter-name">activityType</span></span></li>
 </ol>)
-      <div class="features">override</div>
-    </section>
-    <section class="desc markdown">
-      <p>Gets an account by its unique id or login.</p>
-<ul>
-<li><code>correlationId</code>     (optional) transaction id to trace execution through call chain.</li>
-<li><code>idOrLogin</code>                an unique id or login of account to be retrieved.
-Return         Future that receives account or error.</li>
-</ul>
+      
     </section>
     
     

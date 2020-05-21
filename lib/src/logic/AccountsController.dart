@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:pip_services3_commons/pip_services3_commons.dart';
 import 'package:pip_services3_components/pip_services3_components.dart';
+import 'package:pip_clients_activities/pip_clients_activities.dart';
+import 'package:pip_services_activities/pip_services_activities.dart';
 
 import '../../src/data/version1/AccountV1.dart';
+import '../../src/data/version1/AccountActivityTypeV1.dart';
 import '../../src/persistence/IAccountsPersistence.dart';
 import './IAccountsController.dart';
 import './AccountsCommandSet.dart';
@@ -29,7 +32,7 @@ class AccountsController
   DependencyResolver dependencyResolver =
       DependencyResolver(AccountsController._defaultConfig);
   final CompositeLogger _logger = CompositeLogger();
-  // IActivitiesClient
+  IActivitiesClientV1 _activitiesClient;
   bool _loginAsEmail = false;
 
   /// Configures component by passing configuration parameters.
@@ -53,7 +56,8 @@ class AccountsController
     dependencyResolver.setReferences(references);
     persistence =
         dependencyResolver.getOneRequired<IAccountsPersistence>('persistence');
-    // activity client
+    _activitiesClient =
+        dependencyResolver.getOneOptional<IActivitiesClientV1>('activities');
   }
 
   /// Gets a command set.
@@ -143,7 +147,23 @@ class AccountsController
     return true;
   }
 
-  // logUserActivity()
+  void logUserActivity(
+      String correlationId, AccountV1 account, String activityType) {
+    if (_activitiesClient != null) {
+      var activity = _activitiesClient.logPartyActivity(
+          correlationId,
+          PartyActivityV1(
+              id: null,
+              type: activityType,
+              party: ReferenceV1(
+                  id: account.id, type: 'account', name: account.name)));
+      if (activity == null) {
+        var err = BadRequestException(
+            correlationId, 'NULL_ACTIVITY', 'Failed logPartyActivity');
+        _logger.error(correlationId, err, 'Failed to log user activity');
+      }
+    }
+  }
 
   /// Creates an account.
   ///
@@ -170,7 +190,8 @@ class AccountsController
 
     var created_account = await persistence.create(correlationId, account);
     // Log activity
-    // logUserActivity()
+    logUserActivity(
+        correlationId, created_account, AccountActivityTypeV1.AccountCreated);
 
     return created_account;
   }
@@ -211,7 +232,8 @@ class AccountsController
 
     var updated_account = await persistence.update(correlationId, account);
     // Log activity
-    // logUserActivity()
+    logUserActivity(
+        correlationId, updated_account, AccountActivityTypeV1.AccountChanged);
     return updated_account;
   }
 
@@ -236,7 +258,8 @@ class AccountsController
     await persistence.update(correlationId, newAccount);
 
     if (oldAccount != null) {
-      // logUserActivity()
+      logUserActivity(
+          correlationId, oldAccount, AccountActivityTypeV1.AccountDeleted);
     }
 
     return newAccount;

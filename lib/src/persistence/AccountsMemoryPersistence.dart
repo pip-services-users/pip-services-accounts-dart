@@ -115,9 +115,9 @@ class AccountsMemoryPersistence
     var item = items.isNotEmpty
         ? items.where((item) => item.id == idOrLogin || item.login == idOrLogin)
         : null;
-    
+
     if (item != null && item.isNotEmpty && item.first != null) {
-      logger.trace(correlationId, 'Found account by %s', [idOrLogin]);      
+      logger.trace(correlationId, 'Found account by %s', [idOrLogin]);
     } else {
       logger.trace(correlationId, 'Cannot find account by %s', [idOrLogin]);
     }

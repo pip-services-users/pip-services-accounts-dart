@@ -1,7 +1,7 @@
 name: pip_services_accounts
 version: "1.0.0"
-description: Accounts microservice for Pip.Services in Dart
 author: Sergey Seroukhov <seroukhov@gmail.com>
+description: Accounts microservice for Pip.Services in Dart. It registers users and creates their accounts and eeps key user descriptions and settings (about, location, language, theme, ...)
 homepage: https://github.com/pip-services-users/pip-services-accounts-dart
 
 environment:
@@ -15,6 +15,8 @@ dependencies:
   pip_services3_rpc: ">=1.0.2 <2.0.0"
   pip_services3_grpc: ">=1.0.0 <2.0.0"
   pip_services3_container: ">=1.0.0 <2.0.0"
+  pip_clients_activities: ">=1.0.0 <2.0.0"
+  pip_services_activities: ">=1.0.0 <2.0.0"
   http: "^0.12.0"
   angel_framework: ^2.1.1
 
